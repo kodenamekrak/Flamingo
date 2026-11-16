@@ -1,0 +1,48 @@
+{
+  "$schema": "https://raw.githubusercontent.com/QuestPackageManager/QPM.Package/refs/heads/main/qpm.schema.json",
+  "configVersion": "2.0.0",
+  "id": "flamingo",
+  "version": "1.0.0",
+  "additionalData": {
+    "description": "",
+    "author": "",
+    "license": "",
+    "url": "https://github.com/sc2ad/Flamingo"
+  },
+  "workspace": {
+    "scripts": {
+      "build": [
+        "pwsh ./build.ps1"
+      ],
+      "build-android-test": [
+        "pwsh ./build-android-test.ps1"
+      ]
+    },
+    "outBinaries": [
+      "libflamingo.so"
+    ],
+    "toolchainOut": "toolchain.json"
+  },
+  "qmod": {
+    "output": "flamingo.qmod",
+    "template": "mod.template.json",
+    "searchDirs": [
+      "./build"
+    ],
+    "includeFiles": [],
+    "id": "flamingo"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "capstone": {
+      "versionRange": "^0.1.0",
+      "qmod": "required"
+    },
+    "fmt": {
+      "versionRange": "^11.0.0",
+      "qmod": "required"
+    }
+  },
+  "dependenciesDirectory": "extern",
+  "sharedDirectory": "shared"
+}

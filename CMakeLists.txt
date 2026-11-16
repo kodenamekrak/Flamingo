@@ -97,45 +97,45 @@ if (TEST_BUILD)
     add_test(fixups fixup-test)
     add_test(apis api-test)
 else()
-    include(qpm_defines.cmake)
-    project(${COMPILE_ID})
+    include(toolchain.cmake)
+    include(ndk.cmake)
+    project(${QPM_TOOLCHAIN_PACKAGE_ID})
 
-    add_library(${COMPILE_ID} SHARED)
+    add_library(${PROJECT_NAME} SHARED)
 
-    target_link_libraries(${COMPILE_ID} PRIVATE capstone -llog)
-    target_include_directories(${COMPILE_ID} PRIVATE ${EXTERN_DIR}/includes ${EXTERN_DIR}/includes/capstone/shared ${EXTERN_DIR}/includes/fmt/fmt/include)
+    target_link_libraries(${PROJECT_NAME} PRIVATE capstone -llog)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${EXTERN_DIR}/includes ${EXTERN_DIR}/includes/capstone/shared ${EXTERN_DIR}/includes/fmt/fmt/include)
     # add shared dir as include dir
-    target_include_directories(${COMPILE_ID} PUBLIC ${SHARED_DIR})
-    target_include_directories(${COMPILE_ID} PRIVATE ${SOURCE_DIR} ${INCLUDE_DIR})
+    target_include_directories(${PROJECT_NAME} PUBLIC ${SHARED_DIR})
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SOURCE_DIR} ${INCLUDE_DIR})
 
     # TODO: Until paper lets us build without exceptions, we don't use paper.
-    target_link_options(${COMPILE_ID} PRIVATE -Wl,--exclude-libs,ALL)
-    target_compile_options(${COMPILE_ID} PRIVATE -DFLAMINGO_LOG_STANDALONE -fvisibility=hidden -Wall -Wextra -Werror -Wpedantic)
+    target_link_options(${PROJECT_NAME} PRIVATE -Wl,--exclude-libs,ALL)
+    target_compile_options(${PROJECT_NAME} PRIVATE -DFLAMINGO_LOG_STANDALONE -fvisibility=hidden -Wall -Wextra -Werror -Wpedantic)
 
-    target_sources(${COMPILE_ID} PUBLIC ${SOURCE_DIR}/capi.cpp ${SOURCE_DIR}/fixups.cpp ${SOURCE_DIR}/installer.cpp ${SOURCE_DIR}/page-allocator.cpp)
+    target_sources(${PROJECT_NAME} PUBLIC ${SOURCE_DIR}/capi.cpp ${SOURCE_DIR}/fixups.cpp ${SOURCE_DIR}/installer.cpp ${SOURCE_DIR}/page-allocator.cpp)
 
     if (TEST_ON_ANDROID)
-        target_sources(${COMPILE_ID} PUBLIC ${SOURCE_DIR}/flamingo-stamp.cpp)
+        target_sources(${PROJECT_NAME} PUBLIC ${SOURCE_DIR}/flamingo-stamp.cpp)
     endif()
 
-    include(extern.cmake)
 
-    add_custom_command(TARGET ${COMPILE_ID} POST_BUILD
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_STRIP} -S -d --strip-all
-            "lib${COMPILE_ID}.so" -o "stripped_lib${COMPILE_ID}.so"
+            "lib${PROJECT_NAME}.so" -o "stripped_lib${PROJECT_NAME}.so"
             COMMENT "Strip debug symbols done on final binary.")
 
-    add_custom_command(TARGET ${COMPILE_ID} POST_BUILD
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E make_directory debug
                 COMMENT "Create the debug dir"
     )
-    add_custom_command(TARGET ${COMPILE_ID} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E rename lib${COMPILE_ID}.so debug/lib${COMPILE_ID}.so
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E rename lib${PROJECT_NAME}.so debug/lib${PROJECT_NAME}.so
                 COMMENT "Rename the lib to debug_ since it has debug symbols"
                 )
 
-    add_custom_command(TARGET ${COMPILE_ID} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E rename stripped_lib${COMPILE_ID}.so lib${COMPILE_ID}.so
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E rename stripped_lib${PROJECT_NAME}.so lib${PROJECT_NAME}.so
                 COMMENT "Rename the stripped lib to regular"
                 )
 endif()

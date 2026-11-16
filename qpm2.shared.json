@@ -1,0 +1,67 @@
+{
+  "$schema": "https://raw.githubusercontent.com/QuestPackageManager/QPM.Package/refs/heads/main/qpm.shared.schema.json",
+  "config": {
+    "configVersion": "2.0.0",
+    "id": "flamingo",
+    "version": "1.0.0",
+    "additionalData": {
+      "description": "",
+      "author": "",
+      "license": "",
+      "url": "https://github.com/sc2ad/Flamingo"
+    },
+    "workspace": {
+      "scripts": {
+        "build": [
+          "pwsh ./build.ps1"
+        ],
+        "build-android-test": [
+          "pwsh ./build-android-test.ps1"
+        ]
+      },
+      "outBinaries": [
+        "libflamingo.so"
+      ],
+      "toolchainOut": "toolchain.json"
+    },
+    "qmod": {
+      "output": "flamingo.qmod",
+      "template": "mod.template.json",
+      "searchDirs": [
+        "./build"
+      ],
+      "includeFiles": [],
+      "id": "flamingo"
+    },
+    "dependencies": {},
+    "devDependencies": {
+      "fmt": {
+        "versionRange": "^11.0.0",
+        "qmod": "required"
+      },
+      "capstone": {
+        "versionRange": "^0.1.0",
+        "qmod": "required"
+      }
+    },
+    "dependenciesDirectory": "extern",
+    "sharedDirectory": "shared"
+  },
+  "restoredDependencies": {
+    "capstone": {
+      "restoredVersion": "0.1.0",
+      "qpkgChecksum": "df32d2ef43439f0e3265f3cdcd328c8580c856a36390ac3c444584ff6c890f7b",
+      "restoredBinaries": [
+        "libcapstone.a"
+      ],
+      "restoredEnv": {}
+    },
+    "fmt": {
+      "restoredVersion": "11.0.2",
+      "qpkgChecksum": "2651472c5fcb5cf5d8de161f675862b6e85f5b8ede4bd23434e190cbed169591",
+      "restoredBinaries": [],
+      "restoredEnv": {}
+    }
+  },
+  "env": {}
+}

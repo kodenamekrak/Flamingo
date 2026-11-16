@@ -58,6 +58,8 @@ extern/
 extern.cmake
 qpm_defines.cmake
 build/
+*.qpkg
+toolchain.json
 
 build-linux/
 *.inc
